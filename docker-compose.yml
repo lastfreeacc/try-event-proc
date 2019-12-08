@@ -3,14 +3,9 @@ services:
   kafka:
     build: 
         context: ./kafka
-    environment:
-      - KAFKA_ADVERTISED_HOST_NAME=localhost
-      - KAFKA_CREATE_TOPICS=test:1:1
-      - KAFKA_HEAP_OPTS=-Xmx2G -Xms2G
-      - KAFKA_NUM_PARTITIONS=1
     ports:
-      - 2181
-      - 9092
+      - "2181:2181"
+      - "9092:9092"
     volumes:
       - kafka-logs:/tmp/kafka-logs
       - /var/run/docker.sock:/var/run/docker.sock
