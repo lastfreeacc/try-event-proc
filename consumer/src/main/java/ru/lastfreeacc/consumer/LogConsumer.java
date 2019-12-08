@@ -59,7 +59,7 @@ public class LogConsumer {
             return;
         }
         Map<TopicPartition, OffsetAndMetadata> map = new HashMap<>();
-        
+
         for (ConsumerRecord<String, String> record: consumerRecords) {
             processRecord(record);
             appendCommitMap(map, record);
@@ -76,7 +76,7 @@ public class LogConsumer {
 
     private void processRecord(ConsumerRecord<String, String> record) throws IOException {
         doHardWork();
-        Path file = Paths.get("db.txt");
+        Path file = Paths.get("./db.txt");
         Files.write(file, Collections.singleton(record.value()), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
     }
 
