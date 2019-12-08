@@ -10,6 +10,13 @@ services:
       - kafka-logs:/tmp/kafka-logs
       - /var/run/docker.sock:/var/run/docker.sock
     # network_mode: bridge
+  producer:
+    build: 
+      context: ./producer
+    depends_on:
+      - kafka
+    links: 
+      - kafka
 
 volumes:
   kafka-logs:

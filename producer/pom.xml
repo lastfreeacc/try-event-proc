@@ -62,6 +62,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>producer</finalName>
     </build>
 
 </project>
