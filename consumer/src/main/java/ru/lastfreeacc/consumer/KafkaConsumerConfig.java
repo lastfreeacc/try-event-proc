@@ -3,6 +3,7 @@ package ru.lastfreeacc.consumer;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,16 +24,16 @@ public class KafkaConsumerConfig {
     private Integer batchSize;
 
     @Bean
-    public Consumer<String, String> consumer() {
+    public Consumer<Long, String> consumer() {
         final Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 nodes);
         props.put(ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class.getName());
+                LongDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class.getName());
+                StringDeserializer.class);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
                 batchSize);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,
@@ -40,8 +41,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG,
                 false);
 
-
-        final Consumer<String, String> consumer = new KafkaConsumer<>(props);
+        final Consumer<Long, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList(topic));
 
         return consumer;

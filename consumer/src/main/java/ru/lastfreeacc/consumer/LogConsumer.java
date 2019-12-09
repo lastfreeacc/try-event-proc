@@ -31,10 +31,10 @@ public class LogConsumer {
     @Value("${inner.batch.interval}")
     private Long batchInterval;
 
-    private final Consumer<String, String> consumer;
+    private final Consumer<Long, String> consumer;
 
     @Autowired
-    public LogConsumer(Consumer<String, String> consumer) {
+    public LogConsumer(Consumer<Long, String> consumer) {
         this.consumer = consumer;
     }
 
@@ -52,7 +52,7 @@ public class LogConsumer {
     }
 
     private void processBatch() throws IOException {
-        ConsumerRecords<String, String> consumerRecords =
+        ConsumerRecords<Long, String> consumerRecords =
                 consumer.poll(Duration.ofMillis(batchInterval));
         if (consumerRecords.isEmpty()) {
             log.debug("nothing to consume");
@@ -60,7 +60,7 @@ public class LogConsumer {
         }
         Map<TopicPartition, OffsetAndMetadata> map = new HashMap<>();
 
-        for (ConsumerRecord<String, String> record: consumerRecords) {
+        for (ConsumerRecord<Long, String> record: consumerRecords) {
             processRecord(record);
             appendCommitMap(map, record);
         }
@@ -68,13 +68,13 @@ public class LogConsumer {
         consumer.commitSync(map);
     }
 
-    private void appendCommitMap(Map<TopicPartition, OffsetAndMetadata> map, ConsumerRecord<String, String> record) {
+    private void appendCommitMap(Map<TopicPartition, OffsetAndMetadata> map, ConsumerRecord<Long, String> record) {
         TopicPartition tp = new TopicPartition(record.topic(), record.partition());
         OffsetAndMetadata om = new OffsetAndMetadata(record.offset());
         map.put(tp, om);
     }
 
-    private void processRecord(ConsumerRecord<String, String> record) throws IOException {
+    private void processRecord(ConsumerRecord<Long, String> record) throws IOException {
         doHardWork();
         Path file = Paths.get("./db.txt");
         Files.write(file, Collections.singleton(record.value()), StandardCharsets.UTF_8, StandardOpenOption.APPEND);

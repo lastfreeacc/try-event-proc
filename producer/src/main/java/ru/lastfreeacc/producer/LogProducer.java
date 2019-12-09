@@ -18,14 +18,14 @@ public class LogProducer {
     @Value("${inner.rate}")
     private Integer rate;
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<Long, String> kafkaTemplate;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static int num = 0;
 
     @Autowired
     public LogProducer(
-            KafkaTemplate<String, String> kafkaTemplate)
+            KafkaTemplate<Long, String> kafkaTemplate)
     {
         this.kafkaTemplate = kafkaTemplate;
     }
